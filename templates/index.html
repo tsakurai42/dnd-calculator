@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Too Much Work</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .bg {
+            background-image: url("https://i.imgur.com/26ihMzQ.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position:center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container bg">
+        <div class="row">
+            <div class="col-12 text-center" style="background-color:rgba(239, 255, 239,0.25);padding:1rem 0rem">
+                <h1>Testing for DND 5e</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-7 col-xs-12 container-fluid " style="background-color:rgba(239, 255, 239,0.75)">
+
+                <form action="/calculate" method="post">
+                    <div class="form-row pt-2 pb-2">
+                        <div class="col-8">
+                            <label for="class1choice">Class 1 Selection:</label>
+                            <select class="custom-select" id="class1choice" name="class_1">
+                                <option selected>Choose class</option>
+                                <option value="Barbarian">Barbarian</option>
+                                <option value="Bard">Bard</option>
+                                <option value="Monk">Monk</option>
+                                <option value="Paladin">Paladin</option>
+                                <option value="Ranger">Ranger</option>
+                                <option value="Rogue">Rogue</option>
+                                <option value="Warlock">Warlock</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label for="class1level">Class 1 Levels:</label>
+                            <input type="text" class="form-control" id="class1level" placeholder="5" required
+                                name="class_1_level">
+                        </div>
+                    </div>
+                    <div class="form-row pt-2 pb-2">
+                        <div class="col-8">
+                            <label for="class2choice">Class 2 Selection:</label>
+                            <select class="custom-select" id="class2choice" name="class_2">
+                                <option selected>Choose class</option>
+                                <option value="Barbarian">Barbarian</option>
+                                <option value="Bard">Bard</option>
+                                <option value="Monk">Monk</option>
+                                <option value="Paladin">Paladin</option>
+                                <option value="Ranger">Ranger</option>
+                                <option value="Rogue">Rogue</option>
+                                <option value="Warlock">Warlock</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label for="class2level">Class 2 Levels:</label>
+                            <input type="text" class="form-control" id="class2level" placeholder="5"
+                                name="class_2_level">
+                        </div>
+                    </div>
+                    <div class="form-row pt-2 pb-2">
+                        <div class="col-12">
+                            <label for="weaponchoice">Weapon:</label>
+                            <select class="custom-select" id="weaponchoice" name="weapon_chosen">
+                                <option selected>Choose Your Weapon</option>
+                                <option value="Greataxe">Greataxe (1d12)</option>
+                                <option value="Greatsword">Greatsword (2d6)</option>
+                                <option value="Hand Crossbow">Hand Crossbow (1d6)</option>
+                                <option value="Mace">Mace (1d6)</option>
+                                <option value="Rapier">Rapier (1d6)</option>
+                                <option value="Shortsword">Shortsword (1d8)</option>
+                                <option value="Warhammer">Warhammer-versatile (1d10)</option>
+                                <option value="Longbow">Longbow (1d8)</option>
+                                <option value="Glaive">Glaive (1d10)</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row pt-2 pb-2">
+                        <div class="col-3">
+                            <label for="weaponrarity">Weapon Rarity:</label>
+                            <select class="custom-select" id="weaponrarity" name="weapon_rarity">
+                                <option value="0" selected>0</option>
+                                <option value="1">+1</option>
+                                <option value="2">+2</option>
+                                <option value="3">+3</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <label for="fightingstyle">Fighting Style:</label>
+                            <select class="custom-select" id="fightingstyle" name="fighting_style">
+                                <option selected>None</option>
+                                <option value="Two-Weapon Fighting">Two-Weapon Fighting</option>
+                                <option value="Archery">Archery</option>
+                                <option value="Great Weapon Fighting">Great Weapon Fighting</option>
+                                <option value="Dueling">Dueling</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="feats">Feats:</label>
+                            <select multiple class="form-control" id="feats" name="feats">
+                                <option selected>None</option>
+                                <option>Great Weapon Master</option>
+                                <option>Sharpshooter</option>
+                                <option>Polearm Master</option>
+                                <option>Crossbow Expert</option>
+                                <option>Elven Accuracy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row pt-2 pb-2">
+                        <div class="col-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="dualwield" name="dualwield" value=1>
+                                <label class="form-check-label" for="dualwield">
+                                    Dual-Wield?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label for="adv">% advantage:</label>
+                            <input type="text" class="form-control" id="adv" value=0 required name="adv">
+                        </div>
+                    </div>
+                    <div class="form-row pt-2 pb-2">
+                        <div class="col-3">
+                            <label for="iter">Number of iterations:</label>
+                            <select class="custom-select" id="iter" name="trials">
+                                <option value=1000 selected>1000</option>
+                                <option value=5000>5000</option>
+                                <option value=10000>10000</option>
+                                <option value=100>100</option>
+                                <option value=10>10</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <label for="SRs">Number of SR/LR:</label>
+                            <input type="text" class="form-control" id="SRs" value=4 required name="SRs">
+                        </div>
+                        <div class="col-6">
+                            <label for="rounds">Number of rounds per fight:</label>
+                            <input type="text" class="form-control" id="rounds" value=10 required name="rounds">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="Add" disabled>Submit</button>
+                    <button type="reset" class="btn btn-secondary" id="Reset">Reset</button>
+                </form>
+            </div>
+
+            <div class="col-lg-5 col-xs-12" style="background-color:rgba(239, 255, 239,0.75)">
+                Current selection:
+                <span id="class1chosen"></span>
+                <span id="class2chosen"></span>
+                <span id="weaponchosen"></span>
+                <span id="weaponraritychosen"></span>
+                <span id="featschosen"></span>
+                <span id="fightingstylechosen"></span>
+                <span id="dualwieldchosen"></span>
+                <span id="errorfield" style="color:red;font-weight: bold"></span>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <img src="{{url_for('static', filename=imagepath) |  replace('%3F', '?') }}" />
+            </div>
+        </div>
+    </div>
+    <span><a href="/reset">Reset collected data</a></span>
+</body>
+<script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+
+</html>
