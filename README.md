@@ -10,3 +10,11 @@ Supports a little bit of multiclass (two classes), various weapons of rarity 0 t
 It then graphs the resulting DPR averages vs AC on a chart with any prior simulations run.
 
 ![Example page](./readme_figs/example.png)
+
+# To Do:
+* Replace png file with Plotly.js
+* Add a (non-secure) "user ID" field so multiple users can concurrently play with the calculator without interfering with each other.
+* Add other features. Like unarmed monk.
+* Surely there's a better way to calculate which dice should be rolled and which ones get dooubled on crits. Currently the code essentially copies itself twice to account for crits and differing dice being added (brutal critical, half orc savage, other dice get to be doubled, etc.)
+* Perhaps a better way to estimate when a Paladin will use Smite and use up spell slots
+* PAM GWM is broken.
