@@ -2,7 +2,8 @@ import pymongo
 from flask import Flask,render_template, redirect,request
 import numpy as np
 import random
-import calc_dpr
+#import calc_dpr
+from calc_dpr import gogocalculate
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
@@ -63,7 +64,6 @@ def calc():
 @app.route("/reset")
 def reset():
     db.dpr.drop()
-#    os.remove("static/return.png")
     plt.figure(figsize=(12,9))
     plt.ylabel("DPR")
     plt.xticks(np.arange(15,26,step=1))
