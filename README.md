@@ -20,3 +20,6 @@ It then graphs the resulting DPR averages vs AC on a chart with any prior simula
 * Surely there's a better way to calculate which dice should be rolled and which ones get dooubled on crits. Currently the code essentially copies itself twice to account for crits and differing dice being added (brutal critical, half orc savage, other dice get to be doubled, etc.)
 * Perhaps a better way to estimate when a Paladin will use Smite and use up spell slots
 * PAM GWM is broken. Not the calculator, just how much damage it can output.
+
+# greataxe_vs_greatsword.ipynb
+This is just a Jupyter notebook testing the comparison between Greatsword (2d6) vs Greataxe (1d12) for Barbarians.
