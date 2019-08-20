@@ -3,7 +3,8 @@ I was discussing with a friend various strengths and weaknesses of feats and cla
 
 # Libraries used
 pandas, numpy, pyMongo, flask, random, plotly.js.
---> no longer using matplotlib
+
+<del>matplotlib, time, os</del>
 
 # Usage
 Supports a little bit of multiclass (two classes), various weapons of rarity 0 to +3, several fighting styles and feats, Dual-Wield (assumes the same weapon in both hands), % of attacks you will expect to have advantage, and the ability to change the number of rounds per fight, number of short rests per long rest (assumes 1 fight between each short rest), and number of iterations. 
