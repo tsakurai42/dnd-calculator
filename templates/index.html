@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         .bg {
             background-image: url("https://i.imgur.com/26ihMzQ.jpg");
@@ -34,7 +35,7 @@
                                 <option selected>Choose class</option>
                                 <option value="Barbarian">Barbarian</option>
                                 <option value="Bard">Bard</option>
-                                <option value="Monk">Monk</option>
+                                <!-- <option value="Monk">Monk</option> -->
                                 <option value="Paladin">Paladin</option>
                                 <option value="Ranger">Ranger</option>
                                 <option value="Rogue">Rogue</option>
@@ -54,7 +55,7 @@
                                 <option selected>Choose class</option>
                                 <option value="Barbarian">Barbarian</option>
                                 <option value="Bard">Bard</option>
-                                <option value="Monk">Monk</option>
+                                <!-- <option value="Monk">Monk</option> -->
                                 <option value="Paladin">Paladin</option>
                                 <option value="Ranger">Ranger</option>
                                 <option value="Rogue">Rogue</option>
@@ -171,12 +172,21 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <img src="{{url_for('static', filename=imagepath) |  replace('%3F', '?') }}" />
+                <div id="dprplotly"></div>
             </div>
         </div>
+        <!-- <div class="row">
+            <div class="col-12">
+                <img src="{{url_for('static', filename=imagepath) |  replace('%3F', '?') }}" />
+            </div>
+        </div> -->
     </div>
     <span><a href="/reset">Reset collected data</a></span>
 </body>
+<script type="text/javascript">
+    all_tests = {{ all_tests | tojson }}
+</script>
+
 <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
 
 </html>

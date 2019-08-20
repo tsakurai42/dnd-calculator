@@ -16,6 +16,34 @@ var dualwield = d3.select('#dualwield')
 var dualwieldchosen = d3.select('#dualwieldchosen')
 
 //document.getElementById("Add").addEventListener("load", errorcheck)
+traces = []
+
+for (each_trace of all_tests) {
+    new_trace_y = []
+    for (i = 15; i<26;i++) {
+        new_trace_y.push(each_trace[i])
+    }
+    new_trace = {
+        x: [15,16,17,18,19,20,21,22,23,24,25],
+        y: new_trace_y,
+        type: 'line',
+        name: each_trace['desc']
+    }
+    traces.push(new_trace)
+}
+
+layout = {
+    height: 600,
+    xaxis: {
+        title: 'Target AC',
+        dtick:1
+    },
+    yaxis: {
+        title: 'Damage per Round'
+    }
+}
+
+Plotly.newPlot('dprplotly', traces,layout);
 
 class1.on("change", () => {
     errorcheck();
@@ -79,7 +107,7 @@ fightingstyle.on("change", () => {
     fightingstylechosen.text(event.target.value)
 })
 
-feats.on("change", function (d) {
+feats.on("change", () => {
     errorcheck();
     var values = [];
     selected = d3.select(this) // select the select
@@ -94,64 +122,77 @@ feats.on("change", function (d) {
 // })
 
 function errorcheck() {
-    d3.select('#errorfield').text("")
+    d3.select('#errorfield').text("");
+    var error_text = "";
+    // Cannot Dual Wield 2H weapons
     if ((weaponchoice.property('value') == "Longbow" || weaponchoice.property('value') == "Greataxe" ||
         weaponchoice.property('value') == "Greatsword" || weaponchoice.property('value') == "Warhammer" ||
         weaponchoice.property('value') == "Glaive" || weaponchoice.property('value') == "Hand Crossbow")
         && dualwield.property("checked")) {
-        d3.select('#errorfield').text("Dual Wield + 2H weapon error (or Handcrossbow)");
+        // d3.select('#errorfield').text("Dual Wield + 2H weapon error (or Handcrossbow)");
+        error_text += "Dual Wield + 2H weapon error (or Handcrossbow). "
         document.getElementById("Add").disabled = true;
         var isError = true
-    }
+    };
+    // Cannot Great Weapon Fighting(Feat) with 1H or Ranged weapons
     if ((weaponchoice.property('value') == "Longbow" || weaponchoice.property('value') == "Mace" ||
         weaponchoice.property('value') == "Rapier" || weaponchoice.property('value') == "Shortsword" ||
         weaponchoice.property('value') == "Hand Crossbow")
         && fightingstyle.property('value') == "Great Weapon Fighting") {
-        d3.select('#errorfield').text("GWF + 1H/Ranged error");
+        // d3.select('#errorfield').text("GWF + 1H/Ranged error");
+        error_text += "GWF + 1H/Ranged error. ";
         document.getElementById("Add").disabled = true;
         var isError = true
     }
+    //  User selected the same class for multiclassing
     if ((class1.property('value') == class2.property('value')) && class1.property('value') != "Choose class") {
-        d3.select('#errorfield').text("First and Second class cannot be the same");
+        // d3.select('#errorfield').text("First and Second class cannot be the same");
+        error_text += "First and Second class cannot be the same. ";
         document.getElementById("Add").disabled = true;
         var isError = true
     }
+    // User multiclassed but combined levels is greater than 20
     if (parseInt(class1level.property('value')) + parseInt(class2level.property('value')) > 20) {
-        d3.select('#errorfield').text("Total class is greater than 20");
+        // d3.select('#errorfield').text("Total class is greater than 20");
+        error_text += "Total levels is greater than 20. "
         document.getElementById("Add").disabled = true;
         var isError = true
     }
+    // User multiclassed, but did not define a level for the 2nd class
     if (class2.property('value') != "Choose class" && class2level.property('value') == '') {
-        d3.select('#errorfield').text("Class must have a level");
+        // d3.select('#errorfield').text("Class must have a level");
+        error_text += "Class 2 must have a level. ";
         document.getElementById("Add").disabled = true;
         var isError = true
     }
+    // User did not define a level for the 1st class
     if (class1.property('value') != "Choose class" && class1level.property('value') == '') {
-        d3.select('#errorfield').text("Class must have a level");
+        // d3.select('#errorfield').text("Class must have a level");
+        error_text += "Class 1 must have a level. ";
         document.getElementById("Add").disabled = true;
         var isError = true
     }
+    // User has not chosen a class at all yet!
     if (class1.property('value') == 'Choose class') {
-        d3.select('#errorfield').text("Must choose a class");
+        // d3.select('#errorfield').text("Must choose a class");
         document.getElementById("Add").disabled = true;
+        error_text += "Must choose a class. ";
         var isError = true
     }
+    // Need to choose a weapon
     if (weaponchoice.property('value') == "Choose Your Weapon") {
-        d3.select('#errorfield').text("Choose a weapon");
+        // d3.select('#errorfield').text("Choose a weapon");
+        error_text += "Must choose a weapon. "
         document.getElementById("Add").disabled = true;
         var isError = true
     }
+    console.log(error_text)
+    if (isError) {
+        d3.select('#errorfield').text(error_text);
+    }
+    
     if (!isError) {
         document.getElementById("Add").disabled = false;
         var isError = false;
     }
 }
-{/*                                 <option value="Greataxe">Greataxe (1d12)</option>
-                                <option value="Greatsword">Greatsword (2d6)</option>
-                                <option value="Hand Crossbow">Hand Crossbow (1d6)</option>
-                                <option value="Mace">Mace (1d6)</option>
-                                <option value="Rapier">Rapier (1d6)</option>
-                                <option value="Shortsword">Shortsword (1d8)</option>
-                                <option value="Warhammer">Warhammer-versatile (1d10)</option>
-                                <option value="Longbow">Longbow (1d8)</option>
-                                <option value="Glaive">Glaive (1d10)</option> */}

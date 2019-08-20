@@ -156,7 +156,7 @@ def gogocalculate(input_vars):
                 brutal_critical = True
                 brutal_critical_dice = [int(np.floor((each_class[1]-9)/4)+1),weapon_chosen[2]]
         
-        elif each_class[0] == "Bard": #swords
+        elif each_class[0] == "Bard": #college of swords
             bard = True
             bardic_inspiration = True
             if each_class[1] >= 6 and extra_attack == 0:
@@ -175,7 +175,7 @@ def gogocalculate(input_vars):
             if not two_weapon_fighting and not dueling:
                 print("Should prob choose a fighting style")
             
-        #elif each_class[0] == "Cleric": #fuck cleric
+        #elif each_class[0] == "Cleric": #skipping cleric
         
         elif each_class[0] == "Fighter": #should work on its own
             fighter =  True
@@ -279,8 +279,8 @@ def gogocalculate(input_vars):
                 lifedrinker =  True
             if each_class[1] >= 5:
                 thirsting_blade = True
-            #fuck it just hard code a list
-            warlock_level = each_class[0]
+            #could not figure out a good way to code spell slots and spell levels so hard coded a list
+            warlock_level = each_class[1]
             warlock_spell_slots = [0,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4]
             warlock_spell_levels = [0,1,1,2,2,3,3,4,4,5,5,5,5,5,5,5,5,5,5,5,5]
 
@@ -314,7 +314,11 @@ def gogocalculate(input_vars):
                 #warlock spell slot reset:
                 if paladin and warlock:
                     for _ in range(warlock_spell_slots[warlock_level]):
-                        smite_slots.insert(0,warlock_spell_levels[warlock_level])
+                        if warlock_spell_levels[warlock_level] == 5:
+                            warlock_smite = [5,8]
+                        else:
+                            warlock_smite = [warlock_spell_levels[warlock_level]+1,8]
+                        smite_slots.insert(0,warlock_smite)
                 if bard:
                     BI_spent_count = 0
                 if combat_superiority:
@@ -414,6 +418,7 @@ def gogocalculate(input_vars):
 
                                 if smite and len(smite_slots)>0 and random.randint(1,2)>=2:
                                     spend_smite = smite_slots.pop(0)
+                                    #print(spend_smite)
                                     damage_dice += spend_smite[0]*[spend_smite[1]]
 
                                 if hunters_mark:

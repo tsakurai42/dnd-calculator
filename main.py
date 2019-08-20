@@ -2,7 +2,6 @@ import pymongo
 from flask import Flask,render_template, redirect,request
 import numpy as np
 import random
-#import calc_dpr
 from calc_dpr import gogocalculate
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,68 +18,64 @@ db = client.dnd
 
 @app.route("/", methods=["GET","POST"])
 def index():
-    # if request.method == 'POST':
-    #     #test = request.form['testest']
-    #     print('POST!')
-    # else:
-    #     print('nope')
-    # if dpr != 0:
-    image = f'return.png?time={time.time()}'
-    #print(image)
-    return render_template('index.html',imagepath=image)
-    #     print('render temp')
-    # else:
-    #     print('redirect to calc')
-    #     return redirect('/calculate', code=302)
-
+    all_tests_from_db = db.dpr.find({},{'_id':0})
+    all_tests = []
+    for _ in all_tests_from_db:
+        all_tests.append(_)
+    print(all_tests)
+    image = f'return.png?time={time.time()}'  #Method to force a refresh and force the browser to NOT use a cached version of the same image.
+    return render_template('index.html',all_tests = all_tests)#,imagepath=image)
 
 @app.route("/calculate", methods=["GET","POST"])
 def calc():
-    DPR_calculated = calc_dpr.gogocalculate(request.form) #returns list of damage per rounds
+    DPR_calculated = gogocalculate(request.form) #returns list of damage per rounds
     DPRdict = {}
+    # create new dictionary
     DPRdict['desc'] = DPR_calculated.pop(0)
-    for i,_ in enumerate(DPR_calculated):
-        DPRdict[str(i+15)] = _
+    # description is first entry, pop off and store in dictionary
+    for i,_ in enumerate(DPR_calculated,15):
+        DPRdict[str(i)] = _
+        # add each DPR entry for each AC into the same dictionary
     db.dpr.insert_one(DPRdict)
-    all_dpr_df = pd.DataFrame()
-    all_stats = db.dpr.find()
-    for each_stats in all_stats:
-        print(each_stats)
-        AC_DPR = []
-        for each_ac in range(15,26):
-            AC_DPR.append(each_stats[str(each_ac)])
-        all_dpr_df[each_stats['desc']] = AC_DPR
-    #print(all_stats)
-        #print(all_dpr_df)
-    plt.figure(figsize=(12,9))
-    plt.plot(range(15,26),all_dpr_df,marker='o')
-    plt.ylabel("DPR")
-    plt.xticks(np.arange(15,26,step=1))
-    plt.xlabel("AC")
-    plt.legend(all_dpr_df.columns,loc='best')
-    plt.savefig("static/return.png")
+    # And load to the database.
+
+
+    ######
+    #OLD CODE TO CREATE MATPLOTLIB FIGURE. HAS BEEN REPLACED WITH PLOTLY.JS
+    ######
+    # all_dpr_df = pd.DataFrame()
+    # all_stats = db.dpr.find()
+    # #pull all the previously done DPR calculations to create the image
+    # for each_stats in all_stats:
+    #     print(each_stats)
+    #     AC_DPR = []
+    #     # create new list
+    #     for each_ac in range(15,26):
+    #         AC_DPR.append(each_stats[str(each_ac)]) #append each DPR to a list
+    #     all_dpr_df[each_stats['desc']] = AC_DPR #add list of DPRs into a dataframe under each description
+    
+    # plt.figure(figsize=(12,9))
+    # plt.plot(range(15,26),all_dpr_df,marker='o')
+    # plt.ylabel("DPR")
+    # plt.xticks(np.arange(15,26,step=1))
+    # plt.xlabel("AC")
+    # plt.legend(all_dpr_df.columns,loc='best')
+    # plt.savefig("static/return.png")
     return redirect('../', code=302)
 
 @app.route("/reset")
 def reset():
-    db.dpr.drop()
+    db.dpr.drop() #drop the whole database
     plt.figure(figsize=(12,9))
     plt.ylabel("DPR")
     plt.xticks(np.arange(15,26,step=1))
     plt.xlim(14,26)
     plt.xlabel("AC")
     plt.savefig("static/return.png")
+    #blank image
 
     return redirect('../',code=302)
 
-# prevent cached responses
-# if app.config["DEBUG"]:
-#     @app.after_request
-#     def after_request(response):
-#         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
-#         response.headers["Expires"] = 0
-#         response.headers["Pragma"] = "no-cache"
-#         return response
-
 if __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0')
+    # app.run(debug=True,host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5000)
