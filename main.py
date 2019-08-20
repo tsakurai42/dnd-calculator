@@ -1,12 +1,10 @@
 import pymongo
 from flask import Flask,render_template, redirect,request
-import numpy as np
-import random
 from calc_dpr import gogocalculate
 import pandas as pd
-import matplotlib.pyplot as plt
-import time
-import os
+# import matplotlib.pyplot as plt
+#import time
+# import os
 
 app = Flask(__name__)
 
@@ -22,8 +20,8 @@ def index():
     all_tests = []
     for _ in all_tests_from_db:
         all_tests.append(_)
-    print(all_tests)
-    image = f'return.png?time={time.time()}'  #Method to force a refresh and force the browser to NOT use a cached version of the same image.
+    #print(all_tests)
+    #image = f'return.png?time={time.time()}'  #Method to force a refresh and force the browser to NOT use a cached version of the same image.
     return render_template('index.html',all_tests = all_tests)#,imagepath=image)
 
 @app.route("/calculate", methods=["GET","POST"])

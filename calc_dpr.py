@@ -1,7 +1,5 @@
 import numpy as np
-import random
-import pandas
-import matplotlib.pyplot as plt
+from random import randint
 
 def gogocalculate(input_vars):
 
@@ -289,10 +287,6 @@ def gogocalculate(input_vars):
 ###               LOOPS START HERE                                         ####
 ###############################################################################
 
-# spell_slots only recharge on long rest... fuck.
-
-# wherever long rests are...
-
     list_DPRs = []
 
     for target_ac in range(15,26):
@@ -337,7 +331,7 @@ def gogocalculate(input_vars):
                     use_ki = False
                     already_sneak_attacked = False
 
-                    adv_roll = random.randint(1,100)
+                    adv_roll = randint(1,100)
 
                     if flurry_of_blows and ki_spent_count< ki_points:
                         use_ki = True
@@ -346,16 +340,16 @@ def gogocalculate(input_vars):
                     if adv_roll <= advantage:
                         if elven_accuracy:
                             for k in range(extra_attack + 1 + 2*use_ki):
-                                attack_rolls.append(max(random.randint(1,20),random.randint(1,20),random.randint(1,20)))
+                                attack_rolls.append(max(randint(1,20),randint(1,20),randint(1,20)))
                         else:
                             for k in range(extra_attack + 1 + 2*use_ki):
-                                attack_rolls.append(max(random.randint(1,20),random.randint(1,20)))
+                                attack_rolls.append(max(randint(1,20),randint(1,20)))
 
                     else:
                         for k in range(extra_attack + 1 + 2*use_ki):
-                            attack_rolls.append(random.randint(1,20))
+                            attack_rolls.append(randint(1,20))
                     if rogue:
-                        if random.randint(1,100) <= sneak_attack_pct:
+                        if randint(1,100) <= sneak_attack_pct:
                             sneak_attack = True
                         else:
                             sneak_attack = False
@@ -416,7 +410,7 @@ def gogocalculate(input_vars):
                                     damage_dice += [imp_smite_dice[1]]
                                 damage_dice += [weapon_chosen[2]]
 
-                                if smite and len(smite_slots)>0 and random.randint(1,2)>=2:
+                                if smite and len(smite_slots)>0 and randint(1,2)>=2:
                                     spend_smite = smite_slots.pop(0)
                                     #print(spend_smite)
                                     damage_dice += spend_smite[0]*[spend_smite[1]]
@@ -451,11 +445,11 @@ def gogocalculate(input_vars):
                     if polearm_master:
                         if adv_roll <= advantage:
                             if elven_accuracy:
-                                pam_attack = max(random.randint(1,20),random.randint(1,20),random.randint(1,20))
+                                pam_attack = max(randint(1,20),randint(1,20),randint(1,20))
                             else:
-                                pam_attack = max(random.randint(1,20),random.randint(1,20))
+                                pam_attack = max(randint(1,20),randint(1,20))
                         else:
-                            pam_attack = random.randint(1,20)
+                            pam_attack = randint(1,20)
 
                         if pam_attack in crit_range:
                             damage_dice += 2*[4]
@@ -472,7 +466,7 @@ def gogocalculate(input_vars):
                             damage_dice += [4]
                             if imp_smite:
                                 damage_dice += [imp_smite_dice[1]]
-                            if smite and len(smite_slots)>0 and random.randint(1,2)>=2:
+                            if smite and len(smite_slots)>0 and randint(1,2)>=2:
                                 spend_smite = smite_slots.pop(0)
                                 damage_dice += spend_smite[0]*[spend_smite[1]]
                             round_damage += (10*great_weapon_master + 10* sharpshooter + attack_mod + 
@@ -484,11 +478,11 @@ def gogocalculate(input_vars):
                     if dual_wield:
                         if adv_roll <= advantage:
                             if elven_accuracy:
-                                off_attack = max(random.randint(1,20),random.randint(1,20),random.randint(1,20))
+                                off_attack = max(randint(1,20),randint(1,20),randint(1,20))
                             else:
-                                off_attack = max(random.randint(1,20),random.randint(1,20))
+                                off_attack = max(randint(1,20),randint(1,20))
                         else:
-                            off_attack = random.randint(1,20)
+                            off_attack = randint(1,20)
 
                         if off_attack in crit_range:
                             damage_dice += 2*[weapon_chosen[2]]
@@ -513,10 +507,10 @@ def gogocalculate(input_vars):
                                 round_damage += attack_mod
 
                     for each_die in damage_dice:
-                        each_dmg_die_roll = random.randint(1,each_die)
+                        each_dmg_die_roll = randint(1,each_die)
                         if great_weapon_fighting:
                             if each_dmg_die_roll <= 2:
-                                each_dmg_die_roll = random.randint(1,each_die)
+                                each_dmg_die_roll = randint(1,each_die)
                         round_damage += each_dmg_die_roll
 
                     total_damage_each_fight.append(round_damage)
