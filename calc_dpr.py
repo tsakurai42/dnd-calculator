@@ -265,7 +265,7 @@ def gogocalculate(input_vars):
         
         elif each_class[0] == "Rogue":
             rogue = True
-            sneak_attack_pct = 50
+            sneak_attack_pct = 97.5
             sneak_attack_dice = [int(np.floor((each_class[1]-1)/2+1)),6]
         
         elif each_class[0] == "Warlock":

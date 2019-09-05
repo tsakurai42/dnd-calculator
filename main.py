@@ -64,12 +64,12 @@ def calc():
 @app.route("/reset")
 def reset():
     db.dpr.drop() #drop the whole database
-    plt.figure(figsize=(12,9))
-    plt.ylabel("DPR")
-    plt.xticks(np.arange(15,26,step=1))
-    plt.xlim(14,26)
-    plt.xlabel("AC")
-    plt.savefig("static/return.png")
+    # plt.figure(figsize=(12,9))
+    # plt.ylabel("DPR")
+    # plt.xticks(np.arange(15,26,step=1))
+    # plt.xlim(14,26)
+    # plt.xlabel("AC")
+    # plt.savefig("static/return.png")
     #blank image
 
     return redirect('../',code=302)
