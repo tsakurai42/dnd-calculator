@@ -14,8 +14,15 @@ var fightingstyle = d3.select('#fightingstyle')
 var fightingstylechosen = d3.select('#fightingstylechosen')
 var dualwield = d3.select('#dualwield')
 var dualwieldchosen = d3.select('#dualwieldchosen')
-
+var bless = d3.select('#bless')
+var blesschosen = d3.select('#blesschosen')
+var sneakattackdiv = d3.select('#snackattack')
+var sneakattack = d3.select('#sneak')
+var adv = d3.select('#adv')
+var shortrests = d3.select('#SRs')
+var rounds = d3.select('#rounds')
 //document.getElementById("Add").addEventListener("load", errorcheck)
+
 traces = []
 
 for (each_trace of all_tests) {
@@ -87,6 +94,16 @@ dualwield.on("change", () => {
 
 })
 
+bless.on("change", () => {
+    errorcheck();
+    if (bless.property("checked")) {
+        blesschosen.text('Blessed')
+    } else {
+        blesschosen.text('')
+    }
+
+})
+
 weaponchoice.on("change", () => {
     errorcheck();
     if (event.target.value == "Choose Your Weapon") {
@@ -116,6 +133,20 @@ feats.on("change", () => {
     featschosen.text(values)
 })
 
+shortrests.on('change', () => {
+    errorcheck();
+})
+
+rounds.on('change', () => {
+    errorcheck();
+})
+sneakattack.on('change', () => {
+    errorcheck();
+})
+adv.on('change', () => {
+    errorcheck();
+})
+
 // d3.select('button').on("click", () => {
 //     d3.event.preventDefault();
 //     window.location = "http://www.google.com"
@@ -124,6 +155,13 @@ feats.on("change", () => {
 function errorcheck() {
     d3.select('#errorfield').text("");
     var error_text = "";
+    if (class1.property('value') == "Rogue" || class2.property('value') == "Rogue") {
+        sneakattackdiv.style('display',null)
+    }
+    if (class1.property('value') != "Rogue" && class2.property('value') != "Rogue") {
+        sneakattackdiv.style('display','none')
+    }
+
     // Cannot Dual Wield 2H weapons
     if ((weaponchoice.property('value') == "Longbow" || weaponchoice.property('value') == "Greataxe" ||
         weaponchoice.property('value') == "Greatsword" || weaponchoice.property('value') == "Warhammer" ||
@@ -186,6 +224,13 @@ function errorcheck() {
         document.getElementById("Add").disabled = true;
         var isError = true
     }
+
+    regexstring = /^\d*$/;
+
+    if (!regexstring.test(class1level.property('value')) || !regexstring.test(class2level.property('value')) || !regexstring.test(rounds.property('value')) || !regexstring.test(shortrests.property('value')) || !regexstring.test(adv.property('value')) || !regexstring.test(sneakattack.property('value'))) {
+        console.log('non-number in number only field')
+    }
+
     console.log(error_text)
     if (isError) {
         d3.select('#errorfield').text(error_text);

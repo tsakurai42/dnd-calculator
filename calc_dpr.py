@@ -3,7 +3,7 @@ from random import randint
 
 def gogocalculate(input_vars):
 
-    total_level = 0
+    # total_level = 0
     damage_dice = []
     extra_attack = 0
     attack_mod = 5
@@ -14,6 +14,7 @@ def gogocalculate(input_vars):
     num_trials = int(input_vars['trials'])
     num_short_rests_per_long_rest = int(input_vars['SRs'])
     fight_rounds = int(input_vars['rounds'])
+    sneak_attack_pct = int(input_vars['sneak'])
 
     barbarian = False
     bard = False
@@ -25,26 +26,11 @@ def gogocalculate(input_vars):
     warlock = False
 
     classes = [[input_vars['class_1'], int(input_vars['class_1_level'])]]
+    total_level = int(input_vars['class_1_level'])
     if input_vars['class_2'] != "Choose class": 
         classes.append([input_vars['class_2'],int(input_vars['class_2_level'])])
-    for _ in classes:
-        total_level += int(_[1])
-        if _[0] == "Barbarian":
-            barbarian = True
-        elif _[0] == "Bard":
-            bard = True
-        elif _[0] == "Fighter":
-            fighter = True
-        elif _[0] == "Monk":
-            monk = True
-        elif _[0] == "Paladin":
-            paladin = True
-        elif _[0] == "Ranger":
-            ranger = True
-        elif _[0] == "Rogue":
-            rogue = True
-        elif _[0] == "Warlock":
-            warlock = True
+        total_level += int(input_vars['class_2_level'])
+    
     prof_bonus = int(np.floor((total_level-1)/4)+2)
 
     weapon_rarity = int(input_vars['weapon_rarity'])
@@ -84,10 +70,10 @@ def gogocalculate(input_vars):
         elif _ == "Crossbow Expert":
             crossbow_expert = True
     
-    dual_wield = False
-    if input_vars.get("dualwield") == 1:
-        dual_wield = True
+        dual_wield = True if input_vars.get('dualwield')==1 else False
     
+    blessed = True if input_vars.get('bless') == 1 else False
+
     weapon_choice = input_vars.get("weapon_chosen")
     
     if weapon_choice == "Greataxe":
@@ -265,8 +251,8 @@ def gogocalculate(input_vars):
         
         elif each_class[0] == "Rogue":
             rogue = True
-            sneak_attack_pct = 97.5
-            sneak_attack_dice = [int(np.floor((each_class[1]-1)/2+1)),6]
+            # sneak_attack_pct = 97.5
+            sneak_attack_dice = [int(np.ceil(each_class[1]/2)),6]
         
         elif each_class[0] == "Warlock":
             warlock = True
@@ -292,7 +278,7 @@ def gogocalculate(input_vars):
     for target_ac in range(15,26):
         total_damage_each_trial = []
         for i in range(num_trials):
-
+            
             if paladin:
                 smite_slots = []
                 smite_slots += spell_slots[4]*[[5,8]]
@@ -348,11 +334,46 @@ def gogocalculate(input_vars):
                     else:
                         for k in range(extra_attack + 1 + 2*use_ki):
                             attack_rolls.append(randint(1,20))
+
                     if rogue:
                         if randint(1,100) <= sneak_attack_pct:
                             sneak_attack = True
                         else:
                             sneak_attack = False
+                    
+                    #base dice first then adjust for crit?
+
+                    # damage_dice_base += [weapon_chosen[2]]
+                    # damage_dice_base += imp_smite*[8]
+                    #     #if smite add here
+                    # damage_dice_base += hunters_mark*[8]
+
+                    # for attack_roll in attack_rolls:
+                    #     #if crit:
+                    #     if attack_roll in crit_range:
+                    #         damage_dice_test = damage_dice_base*2
+                    #         if smite and len(smite_slots)>0:
+                    #             spend_smite = smite_slots.pop(0)
+                    #             damage_dice_test += 2*spend_smite[0]*[spend_smite[1]]
+                    #         if brutal_critical:
+                    #             damage_dice_test += brutal_critical_dice[0]*[brutal_critical_dice[1]]
+                    #         if sneak_attack and not already_sneak_attacked:
+                    #             damage_dice_test += 2* sneak_attack_dice*[6]
+                    #             already_sneak_attacked = True
+                    #         if bardic_inspiration and BI_spent_count < bi_dice[0] and not BI_spent:
+                    #             damage_dice_test += 2*[bi_dice[1]]
+                    #             BI_spent = True
+                    #             BI_spent_count += 1
+                    #         elif bardic_inspiration and BI_spent_count >= bi_dice[0] and not BI_spent and master_flourish:
+                    #             damage_dice += 2* [6]
+                    #             BI_spent = True
+                    #             BI_spent_count += 1
+                    #if using bardic inspiration
+                    #elif master's flourish bard feature
+                    #if crit
+                        #double dice, add brutal critical
+
+
                     for attack_roll in attack_rolls:
                         #print(attack_roll + prof_bonus + 2*archery + attack_mod - 5*great_weapon_master - 5* sharpshooter + weapon_rarity)
                         #if crit
@@ -402,7 +423,7 @@ def gogocalculate(input_vars):
                                             2*dueling)
 
                         elif (attack_roll + prof_bonus + 2*archery + attack_mod - 5*great_weapon_master 
-                            - 5* sharpshooter + weapon_rarity) >= target_ac:
+                            - 5* sharpshooter + weapon_rarity) + blessed*randint(1,4) >= target_ac:
                             if martial_arts:
                                 damage_dice.append(martial_arts_dice)
                             else:
@@ -454,7 +475,7 @@ def gogocalculate(input_vars):
                         if pam_attack in crit_range:
                             damage_dice += 2*[4]
                             if imp_smite:
-                                damage_dice += 2*[imp_smite_dice[1]]    
+                                damage_dice += 2*[imp_smite_dice[1]]
                             if smite and len(smite_slots)>0:
                                 spend_smite = smite_slots.pop(0)
                                 damage_dice += 2*spend_smite[0]*[spend_smite[1]]
@@ -462,7 +483,7 @@ def gogocalculate(input_vars):
                                             hexblade_curse*prof_bonus + rage_damage_mod + weapon_rarity + 
                                             2* dueling)       
                         elif (pam_attack + prof_bonus + 2*archery + attack_mod - 5*great_weapon_master 
-                            - 5* sharpshooter + weapon_rarity) >= target_ac:
+                            - 5* sharpshooter + weapon_rarity) + blessed*randint(1,4) >= target_ac:
                             damage_dice += [4]
                             if imp_smite:
                                 damage_dice += [imp_smite_dice[1]]
@@ -495,7 +516,7 @@ def gogocalculate(input_vars):
                             if two_weapon_fighting:
                                 round_damage += attack_mod
                         elif (off_attack + prof_bonus + 2*archery + attack_mod - 5*great_weapon_master 
-                            - 5* sharpshooter + weapon_rarity) >= target_ac:
+                            - 5* sharpshooter + weapon_rarity) + blessed*randint(1,4) >= target_ac:
                             damage_dice += [weapon_chosen[2]]
                             if sneak_attack and not already_sneak_attacked:
                                 damage_dice += sneak_attack_dice[0]*[sneak_attack_dice[1]]
