@@ -70,8 +70,9 @@ def gogocalculate(input_vars):
         elif _ == "Crossbow Expert":
             crossbow_expert = True
     
-    dual_wield = True if int(input_vars.get('dualwield')) == 1 else False
-    blessed = True if int(input_vars.get('bless')) == 1 else False
+    dual_wield = True if input_vars.get('dualwield') == "1" else False
+    blessed = True if input_vars.get('bless') == "1" else False
+
     weapon_choice = input_vars.get("weapon_chosen")
     
     if weapon_choice == "Greataxe":
